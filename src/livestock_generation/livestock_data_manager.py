@@ -420,8 +420,8 @@ class DataManager:
             "Cattle": {
                 "con_type": "concentrate",
                 "daily_spread": "broadcast",
-                "forage": "pasture",
-                "grazing": "irish_grass",
+                "forage": "irish_grass",
+                "grazing": "pasture",
                 "baseline_manure_management":"tank liquid"
             },
             "Sheep": {
