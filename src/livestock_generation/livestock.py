@@ -437,7 +437,7 @@ class AnimalData:
 
 
             data.loc[new_index, "ef_country"] = ef_country
-            data.loc[new_index, "farm_id"] = -calibration_year
+            data.loc[new_index, "farm_id"] = calibration_year
             data.loc[new_index, "Scenarios"] = -1
             data.loc[new_index, "year"] = calibration_year
             data.loc[new_index, "cohort"] = cohort_name_dict[animal]
