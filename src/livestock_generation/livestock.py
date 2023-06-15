@@ -270,9 +270,9 @@ class AnimalData:
                             break
 
                     data.loc[new_index, "ef_country"] = ef_country
-                    data.loc[new_index, "farm_id"] = index
-                    data.loc[new_index, "Scenarios"] = row["Scenarios"]
-                    data.loc[new_index, "year"] = target_year
+                    data.loc[new_index, "farm_id"] = int(index)
+                    data.loc[new_index, "Scenarios"] = int(row["Scenarios"])
+                    data.loc[new_index, "year"] = int(target_year)
                     data.loc[new_index, "cohort"] = cohort_name_dict[
                         animal_category
                     ]
@@ -437,9 +437,9 @@ class AnimalData:
 
 
             data.loc[new_index, "ef_country"] = ef_country
-            data.loc[new_index, "farm_id"] = calibration_year
+            data.loc[new_index, "farm_id"] = int(calibration_year)
             data.loc[new_index, "Scenarios"] = -1
-            data.loc[new_index, "year"] = calibration_year
+            data.loc[new_index, "year"] = int(calibration_year)
             data.loc[new_index, "cohort"] = cohort_name_dict[animal]
             data.loc[new_index, "pop"] = herd_data_frame.loc[calibration_year,animal]
                     # Colm changed
