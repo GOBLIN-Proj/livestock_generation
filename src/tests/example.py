@@ -38,9 +38,11 @@ def main():
 
         
     #Create dataframes for beef and milk output
-    beef_outputs = export_class.compute_system_protien_exports(scenario_data, baseline_data)
+    beef_outputs = export_class.compute_system_beef_exports(scenario_data, baseline_data)
 
     dairy_outputs = export_class.compute_system_milk_exports(scenario_data, baseline_data)
+    
+    protein_outputs = export_class.compute_system_protein_exports(scenario_data, baseline_data)
 
     #Print generated data
     print(baseline_data)
@@ -50,6 +52,8 @@ def main():
     print(beef_outputs)
 
     print(dairy_outputs)
+
+    print(protein_outputs)
 
 if __name__ == "__main__":
     main()
