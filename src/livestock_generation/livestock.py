@@ -305,18 +305,106 @@ class AnimalData:
                         weight_col = cohort_weight[data.loc[new_index, "cohort"]]["weight_column"]
                         weight_gain = weight_gain_cattle.loc[ef_country, weight_col]
 
-                        if cohort_weight[data.loc[new_index, "cohort"]]["mature"]:
+                        if cohort_weight[data.loc[new_index, "cohort"]]["age"] == "mature":
                             weight = weight_gain
-                        elif cohort_weight[data.loc[new_index, "cohort"]]["more_than_2_years"]:
+
+                        elif cohort_weight[data.loc[new_index, "cohort"]]["age"] == "calf":
+
+                            #if cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "DxD":
+
                             weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + (weight_gain * 365) / 2
-                        else:
-                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + (weight_gain * 365)
+
+                        elif cohort_weight[data.loc[new_index, "cohort"]]["age"] == "less_than_2_yr":
+
+                            if cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "DxD":
+
+                                if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "DxD_calves_m_weight_gain"] * 365 + \
+                                            (weight_gain * 365) / 2
+
+                                elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "DxD_calves_f_weight_gain"] * 365 + \
+                                             (weight_gain * 365) / 2
+
+                            elif cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "DxB":
+
+                                if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "DxB_calves_m_weight_gain"] * 365 + \
+                                             (weight_gain * 365) / 2
+
+                                elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "DxB_calves_f_weight_gain"] * 365 + \
+                                             (weight_gain * 365) / 2
+
+                            elif cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "BxB":
+
+                                if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "BxB_calves_m_weight_gain"] * 365 + \
+                                             (weight_gain * 365) / 2
+
+                                elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "BxB_calves_f_weight_gain"] * 365 + \
+                                             (weight_gain * 365) / 2
+
+                        elif cohort_weight[data.loc[new_index, "cohort"]]["age"] == "more_than_2_yr":
+
+                            if cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "DxD":
+
+                                if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "DxD_calves_m_weight_gain"] * 365 + \
+                                             weight_gain_cattle.loc[ef_country, "DxD_steers_less_2_yr_weight_gain"] * 365 + \
+                                            (weight_gain * 365) / 2
+
+                                elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "DxD_calves_f_weight_gain"] * 365 + \
+                                             weight_gain_cattle.loc[ef_country, "DxD_heifers_less_2_yr_weight_gain"] * 365 + \
+                                             (weight_gain * 365) / 2
+
+                            elif cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "DxB":
+
+                                if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "DxB_calves_m_weight_gain"] * 365 + \
+                                             weight_gain_cattle.loc[ef_country, "DxB_steers_less_2_yr_weight_gain"] * 365 + \
+                                             (weight_gain * 365) / 2
+
+                                elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "DxB_calves_f_weight_gain"] * 365 + \
+                                             weight_gain_cattle.loc[ef_country, "DxB_heifers_less_2_yr_weight_gain"] * 365 + \
+                                             (weight_gain * 365) / 2
+
+                            elif cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "BxB":
+
+                                if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "BxB_calves_m_weight_gain"] * 365 + \
+                                             weight_gain_cattle.loc[ef_country, "BxB_steers_less_2_yr_weight_gain"] * 365 + \
+                                             (weight_gain * 365) / 2
+
+                                elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                             weight_gain_cattle.loc[ef_country, "BxB_calves_f_weight_gain"] * 365 + \
+                                             weight_gain_cattle.loc[ef_country, "BxB_heifers_less_2_yr_weight_gain"] * 365 + \
+                                             (weight_gain * 365) / 2
 
                         data.loc[new_index, "weight"] = weight
+
+
+
                     else:
                         weight_col = cohort_weight[data.loc[new_index, "cohort"]]["weight_column"]
                         weight_gain = weight_gain_sheep.loc[ef_country, weight_col]
-                        if cohort_weight[data.loc[new_index, "cohort"]]["mature"]:
+                        if cohort_weight[data.loc[new_index, "cohort"]]["age"] == "mature":
                             weight = weight_gain
                         else: 
                             weight = weight_gain_sheep.loc[ef_country, "lamb_weight_at_birth"] + weight_gain
@@ -456,24 +544,111 @@ class AnimalData:
                 weight_col = cohort_weight[data.loc[new_index, "cohort"]]["weight_column"]
                 weight_gain = weight_gain_cattle.loc[ef_country, weight_col]
 
-                if cohort_weight[data.loc[new_index, "cohort"]]["mature"]:
+                if cohort_weight[data.loc[new_index, "cohort"]]["age"] == "mature":
                     weight = weight_gain
-                elif cohort_weight[data.loc[new_index, "cohort"]]["more_than_2_years"]:
+
+                elif cohort_weight[data.loc[new_index, "cohort"]]["age"] == "calf":
+
+                    # if cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "DxD":
+
                     weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + (weight_gain * 365) / 2
-                else:
-                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + (weight_gain * 365)
+
+                elif cohort_weight[data.loc[new_index, "cohort"]]["age"] == "less_than_2_yr":
+
+                    if cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "DxD":
+
+                        if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "DxD_calves_m_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                        elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "DxD_calves_f_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                    elif cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "DxB":
+
+                        if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "DxB_calves_m_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                        elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "DxB_calves_f_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                    elif cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "BxB":
+
+                        if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "BxB_calves_m_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                        elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "BxB_calves_f_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                elif cohort_weight[data.loc[new_index, "cohort"]]["age"] == "more_than_2_yr":
+
+                    if cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "DxD":
+
+                        if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "DxD_calves_m_weight_gain"] * 365 + \
+                                     weight_gain_cattle.loc[ef_country, "DxD_steers_less_2_yr_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                        elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "DxD_calves_f_weight_gain"] * 365 + \
+                                     weight_gain_cattle.loc[ef_country, "DxD_heifers_less_2_yr_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                    elif cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "DxB":
+
+                        if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "DxB_calves_m_weight_gain"] * 365 + \
+                                     weight_gain_cattle.loc[ef_country, "DxB_steers_less_2_yr_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                        elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "DxB_calves_f_weight_gain"] * 365 + \
+                                     weight_gain_cattle.loc[ef_country, "DxB_heifers_less_2_yr_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                    elif cohort_weight[data.loc[new_index, "cohort"]]["genetics"] == "BxB":
+
+                        if cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "male":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "BxB_calves_m_weight_gain"] * 365 + \
+                                     weight_gain_cattle.loc[ef_country, "BxB_steers_less_2_yr_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
+
+                        elif cohort_weight[data.loc[new_index, "cohort"]]["gender"] == "female":
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + \
+                                     weight_gain_cattle.loc[ef_country, "BxB_calves_f_weight_gain"] * 365 + \
+                                     weight_gain_cattle.loc[ef_country, "BxB_heifers_less_2_yr_weight_gain"] * 365 + \
+                                     (weight_gain * 365) / 2
 
                 data.loc[new_index, "weight"] = weight
+
+
+
             else:
                 weight_col = cohort_weight[data.loc[new_index, "cohort"]]["weight_column"]
                 weight_gain = weight_gain_sheep.loc[ef_country, weight_col]
-                if cohort_weight[data.loc[new_index, "cohort"]]["mature"]:
+                if cohort_weight[data.loc[new_index, "cohort"]]["age"] == "mature":
                     weight = weight_gain
-                else: 
+                else:
                     weight = weight_gain_sheep.loc[ef_country, "lamb_weight_at_birth"] + weight_gain
 
                 data.loc[new_index, "weight"] = weight
-
 
             if data.loc[new_index, "cohort"] in cohort_dict["Cattle"]:
                 data.loc[new_index, "forage"] = system_params["Cattle"]["forage"]
