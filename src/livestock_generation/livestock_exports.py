@@ -40,9 +40,8 @@ class Exports:
             milk_system_export.loc[sc, "Scenarios"] = sc
 
         return milk_system_export
-    
 
-    def compute_system_beef_exports(self, scenario_animal_data, baseline_animal_data):
+    def compute_system_protien_exports(self, scenario_animal_data, baseline_animal_data):
 
         """
         total beef weight exported from entire system.
@@ -72,7 +71,7 @@ class Exports:
             sc_weight = 0
             herd_slice = sc_herd_dataframe[
                 sc_herd_dataframe["Scenarios"] == sc
-            ]  # take slice of data
+                ]  # take slice of data
 
             weight_df.loc[sc, "Scenarios"] = sc
 
@@ -81,15 +80,15 @@ class Exports:
                 if herd_slice.loc[i, "cohort"] == "DxD_steers_less_2_yr":
                     if sc_herd_dataframe.loc[i, "pop"] != 0:
                         sc_weight += (weight_gain_cattle.loc[ef_country, "birth_weight"] + (
-                                    weight_gain_cattle.loc[ef_country, "DxD_calves_m_weight_gain"] * 365) + \
+                                weight_gain_cattle.loc[ef_country, "DxD_calves_m_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "DxD_steers_less_2_yr_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "DxD_steers_more_2_yr_weight_gain"] * 365)) * \
                                      herd_slice.loc[i, "pop"]
 
                         weight_df.loc[sc, "DxD_steers_system_kg"] = ((weight_gain_cattle.loc[
                                                                           ef_country, "birth_weight"] + (
-                                                                                  weight_gain_cattle.loc[
-                                                                                      ef_country, "DxD_calves_m_weight_gain"] * 365) + \
+                                                                              weight_gain_cattle.loc[
+                                                                                  ef_country, "DxD_calves_m_weight_gain"] * 365) + \
                                                                       (weight_gain_cattle.loc[
                                                                            ef_country, "DxD_steers_less_2_yr_weight_gain"] * 365) + \
                                                                       (weight_gain_cattle.loc[
@@ -100,15 +99,15 @@ class Exports:
                 elif herd_slice.loc[i, "cohort"] == "DxB_steers_less_2_yr":
                     if sc_herd_dataframe.loc[i, "pop"] != 0:
                         sc_weight += (weight_gain_cattle.loc[ef_country, "birth_weight"] + (
-                                    weight_gain_cattle.loc[ef_country, "DxB_calves_m_weight_gain"] * 365) + \
+                                weight_gain_cattle.loc[ef_country, "DxB_calves_m_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "DxB_steers_less_2_yr_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "DxB_steers_more_2_yr_weight_gain"] * 365)) * \
                                      herd_slice.loc[i, "pop"]
 
                         weight_df.loc[sc, "DxB_steers_system_kg"] = ((weight_gain_cattle.loc[
                                                                           ef_country, "birth_weight"] + (
-                                                                                  weight_gain_cattle.loc[
-                                                                                      ef_country, "DxB_calves_m_weight_gain"] * 365) + \
+                                                                              weight_gain_cattle.loc[
+                                                                                  ef_country, "DxB_calves_m_weight_gain"] * 365) + \
                                                                       (weight_gain_cattle.loc[
                                                                            ef_country, "DxB_steers_less_2_yr_weight_gain"] * 365) + \
                                                                       (weight_gain_cattle.loc[
@@ -119,15 +118,15 @@ class Exports:
                 elif herd_slice.loc[i, "cohort"] == "BxB_steers_less_2_yr":
                     if sc_herd_dataframe.loc[i, "pop"] != 0:
                         sc_weight += (weight_gain_cattle.loc[ef_country, "birth_weight"] + (
-                                    weight_gain_cattle.loc[ef_country, "BxB_calves_m_weight_gain"] * 365) + \
+                                weight_gain_cattle.loc[ef_country, "BxB_calves_m_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "BxB_steers_less_2_yr_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "BxB_steers_more_2_yr_weight_gain"] * 365)) * \
                                      herd_slice.loc[i, "pop"]
 
                         weight_df.loc[sc, "BxB_steers_system_kg"] = ((weight_gain_cattle.loc[
                                                                           ef_country, "birth_weight"] + (
-                                                                                  weight_gain_cattle.loc[
-                                                                                      ef_country, "BxB_calves_m_weight_gain"] * 365) + \
+                                                                              weight_gain_cattle.loc[
+                                                                                  ef_country, "BxB_calves_m_weight_gain"] * 365) + \
                                                                       (weight_gain_cattle.loc[
                                                                            ef_country, "BxB_steers_less_2_yr_weight_gain"] * 365) + \
                                                                       (weight_gain_cattle.loc[
@@ -138,15 +137,15 @@ class Exports:
                 elif herd_slice.loc[i, "cohort"] == "DxD_heifers_less_2_yr":
                     if sc_herd_dataframe.loc[i, "pop"] != 0:
                         sc_weight += (weight_gain_cattle.loc[ef_country, "birth_weight"] + (
-                                    weight_gain_cattle.loc[ef_country, "DxD_calves_f_weight_gain"] * 365) + \
+                                weight_gain_cattle.loc[ef_country, "DxD_calves_f_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "DxD_heifers_less_2_yr_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "DxD_heifers_more_2_yr_weight_gain"] * 365)) * \
                                      herd_slice.loc[i, "pop"]
 
                         weight_df.loc[sc, "DxD_heifers_system_kg"] = ((weight_gain_cattle.loc[
                                                                            ef_country, "birth_weight"] + (
-                                                                                   weight_gain_cattle.loc[
-                                                                                       ef_country, "DxD_calves_f_weight_gain"] * 365) + \
+                                                                               weight_gain_cattle.loc[
+                                                                                   ef_country, "DxD_calves_f_weight_gain"] * 365) + \
                                                                        (weight_gain_cattle.loc[
                                                                             ef_country, "DxD_heifers_less_2_yr_weight_gain"] * 365) + \
                                                                        (weight_gain_cattle.loc[
@@ -157,15 +156,15 @@ class Exports:
                 elif herd_slice.loc[i, "cohort"] == "DxB_heifers_less_2_yr":
                     if sc_herd_dataframe.loc[i, "pop"] != 0:
                         sc_weight += (weight_gain_cattle.loc[ef_country, "birth_weight"] + (
-                                    weight_gain_cattle.loc[ef_country, "DxB_calves_f_weight_gain"] * 365) + \
+                                weight_gain_cattle.loc[ef_country, "DxB_calves_f_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "DxB_heifers_less_2_yr_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "DxB_heifers_more_2_yr_weight_gain"] * 365)) * \
                                      herd_slice.loc[i, "pop"]
 
                         weight_df.loc[sc, "DxB_heifers_system_kg"] = ((weight_gain_cattle.loc[
                                                                            ef_country, "birth_weight"] + (
-                                                                                   weight_gain_cattle.loc[
-                                                                                       ef_country, "DxB_calves_f_weight_gain"] * 365) + \
+                                                                               weight_gain_cattle.loc[
+                                                                                   ef_country, "DxB_calves_f_weight_gain"] * 365) + \
                                                                        (weight_gain_cattle.loc[
                                                                             ef_country, "DxB_heifers_less_2_yr_weight_gain"] * 365) + \
                                                                        (weight_gain_cattle.loc[
@@ -176,15 +175,15 @@ class Exports:
                 elif herd_slice.loc[i, "cohort"] == "BxB_heifers_less_2_yr":
                     if sc_herd_dataframe.loc[i, "pop"] != 0:
                         sc_weight += (weight_gain_cattle.loc[ef_country, "birth_weight"] + (
-                                    weight_gain_cattle.loc[ef_country, "BxB_calves_f_weight_gain"] * 365) + \
+                                weight_gain_cattle.loc[ef_country, "BxB_calves_f_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "BxB_heifers_less_2_yr_weight_gain"] * 365) + \
                                       (weight_gain_cattle.loc[ef_country, "BxB_heifers_more_2_yr_weight_gain"] * 365)) * \
                                      herd_slice.loc[i, "pop"]
 
                         weight_df.loc[sc, "BxB_heifers_system_kg"] = ((weight_gain_cattle.loc[
                                                                            ef_country, "birth_weight"] + (
-                                                                                   weight_gain_cattle.loc[
-                                                                                       ef_country, "BxB_calves_f_weight_gain"] * 365) + \
+                                                                               weight_gain_cattle.loc[
+                                                                                   ef_country, "BxB_calves_f_weight_gain"] * 365) + \
                                                                        (weight_gain_cattle.loc[
                                                                             ef_country, "BxB_heifers_less_2_yr_weight_gain"] * 365) + \
                                                                        (weight_gain_cattle.loc[
@@ -196,7 +195,7 @@ class Exports:
 
         return weight_df
 
-    def compute_system_protein_exports(self, scenario_animal_data, baseline_animal_data):
+    def compute_system_total_protein_exports(self, scenario_animal_data, baseline_animal_data):
 
         """
                 total protein exported by the entire system, assuming a milk protein content of 3.5% and a beef protein content of 23%
@@ -219,7 +218,7 @@ class Exports:
         for sc in protein_system_export.index:
 
             milk_output = self.compute_system_milk_exports(scenario_animal_data,baseline_animal_data)
-            beef_output = self.compute_system_beef_exports(scenario_animal_data,baseline_animal_data)
+            beef_output = self.compute_system_protien_exports(scenario_animal_data,baseline_animal_data)
 
             protein_system_export.loc[sc, "milk_protein"] = milk_output.loc[sc, "total_milk_kg"] * milk_protein_content
             protein_system_export.loc[sc, "beef_protein"] = beef_output.loc[sc, "carcass_weight_kg"] * beef_protein_content
