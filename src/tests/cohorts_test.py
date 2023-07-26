@@ -33,7 +33,7 @@ class CohortsDataTestCase(unittest.TestCase):
 
         
 
-        test = self.export_class.compute_system_beef_exports(scenario_data, baseline_data)
+        test = self.export_class.compute_system_proien_exports(scenario_data, baseline_data)
 
         test.to_csv("./data/herd.csv")
 
