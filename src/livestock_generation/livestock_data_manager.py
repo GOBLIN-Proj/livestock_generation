@@ -240,6 +240,24 @@ class DataManager:
         self.cattle_systems = ["Dairy", "Beef"]
         self.sheep_systems = ["Lowland sheep", "Upland sheep"]
 
+        self.calf_weight_gain_lookup = {
+        ("DxD", "male"): "DxD_calves_m_weight_gain",
+        ("DxD", "female"): "DxD_calves_f_weight_gain",
+        ("DxB", "male"): "DxB_calves_m_weight_gain",
+        ("DxB", "female"): "DxB_calves_f_weight_gain",
+        ("BxB", "male"): "BxB_calves_m_weight_gain",
+        ("BxB", "female"): "BxB_calves_f_weight_gain",
+        }
+
+        self.steer_heifer_weight_gain_lookup = {
+            ("DxD", "male"): "DxD_steers_less_2_yr_weight_gain",
+            ("DxD", "female"): "DxD_heifers_less_2_yr_weight_gain",
+            ("DxB", "male"): "DxB_steers_less_2_yr_weight_gain",
+            ("DxB", "female"): "DxB_heifers_less_2_yr_weight_gain",
+            ("BxB", "male"): "BxB_steers_less_2_yr_weight_gain",
+            ("BxB", "female"): "BxB_heifers_less_2_yr_weight_gain",
+        }
+
         self.ANIMAL_SYSTEM_MAPPING = {
             "Dairy": "Dairy prod",
             "Beef": "Beef prod",
@@ -251,21 +269,21 @@ class DataManager:
             "dairy_cows": {
                 "weight_column": "mature_weight_dairy_cows",
                 "age": "mature",
-                "genetics": "undefined",
+                "genetics": None,
                 "gender": "female",
                 "system":"Cattle"
             },
             "suckler_cows": {
                 "weight_column": "mature_weight_suckler_cows",
                 "age": "mature",
-                "genetics": "undefined",
+                "genetics": None,
                 "gender": "female",
                 "system":"Cattle"
             },
             "bulls": {
                 "weight_column": "mature_weight_bulls",
                 "age": "mature",
-                "genetics": "undefined",
+                "genetics": None,
                 "gender": "male",
                 "system":"Cattle"
             },
