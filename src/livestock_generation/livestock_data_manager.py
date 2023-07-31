@@ -86,16 +86,36 @@ class DataManager:
         }
 
         self.EXPORT_WEIGHT_KEYS = {
-            "calf_f": {
-                "DxD_calves_f": "DxD_heifers_less_2_yr",
-                "DxB_calves_f": "DxB_heifers_less_2_yr",
-                "BxB_calves_f": "BxB_heifers_less_2_yr",
+            "DxD_m":{"Pop_Cohort":"DxD_steers_less_2_yr",
+                     "Calf_LWG":"DxD_calves_m_weight_gain",
+                     "Steer_Heifer_less_2_LWG": "DxD_steers_less_2_yr_weight_gain",
+                     "Steer_Heifer_more_2_LWG": "DxD_steers_more_2_yr_weight_gain"
             },
-            "calf_m": {
-                "DxD_calves_m": "DxD_steers_less_2_yr",
-                "DxB_calves_m": "DxB_steers_less_2_yr",
-                "BxB_calves_m": "BxB_steers_less_2_yr",
+            "DxD_f":{"Pop_Cohort":"DxD_heifers_less_2_yr",
+                     "Calf_LWG":"DxD_calves_f_weight_gain",
+                     "Steer_Heifer_less_2_LWG": "DxD_heifers_less_2_yr_weight_gain",
+                     "Steer_Heifer_more_2_LWG": "DxD_heifers_more_2_yr_weight_gain"
             },
+            "DxB_m": {"Pop_Cohort": "DxB_steers_less_2_yr",
+                      "Calf_LWG": "DxB_calves_m_weight_gain",
+                      "Steer_Heifer_less_2_LWG": "DxB_steers_less_2_yr_weight_gain",
+                      "Steer_Heifer_more_2_LWG": "DxB_steers_more_2_yr_weight_gain"
+                      },
+            "DxB_f": {"Pop_Cohort": "DxB_heifers_less_2_yr",
+                      "Calf_LWG": "DxB_calves_f_weight_gain",
+                      "Steer_Heifer_less_2_LWG": "DxB_heifers_less_2_yr_weight_gain",
+                      "Steer_Heifer_more_2_LWG": "DxB_heifers_more_2_yr_weight_gain"
+                      },
+            "BxB_m": {"Pop_Cohort": "BxB_steers_less_2_yr",
+                      "Calf_LWG": "BxB_calves_m_weight_gain",
+                      "Steer_Heifer_less_2_LWG": "BxB_steers_less_2_yr_weight_gain",
+                      "Steer_Heifer_more_2_LWG": "BxB_steers_more_2_yr_weight_gain"
+                      },
+            "BxB_f": {"Pop_Cohort": "BxB_heifers_less_2_yr",
+                      "Calf_LWG": "BxB_calves_f_weight_gain",
+                      "Steer_Heifer_less_2_LWG": "BxB_heifers_less_2_yr_weight_gain",
+                      "Steer_Heifer_more_2_LWG": "BxB_heifers_more_2_yr_weight_gain"
+                      }
         }
 
         self.HERD_RELATION = {
