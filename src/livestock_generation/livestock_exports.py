@@ -40,7 +40,6 @@ class Exports:
             milk_system_export.loc[sc, "Scenarios"] = sc
 
         return milk_system_export
-    
 
     def compute_system_protien_exports(self, scenario_animal_data, baseline_animal_data):
 
@@ -55,135 +54,87 @@ class Exports:
         sc_herd_dataframe = pd.concat([scenario_animal_data, baseline_animal_data], ignore_index=True)
 
         weight_gain_cattle = self.loader_class.weight_gain_cattle()
-
         carcass_weight_as_prop_of_LW = self.data_manager_class.carcass_weight_as_prop_of_LW
-
         export_weight_keys = self.data_manager_class.EXPORT_WEIGHT_KEYS
-
         ef_country = self.ef_country
+        beef_systems = ["DxD_m", "DxD_f", "DxB_m", "DxB_f", "BxB_m", "BxB_f"]
 
         weight_df = pd.DataFrame(
             index=df_index,
-            columns=["Scenarios", "carcass_weight_kg"],
+            columns=["Scenarios", "carcass_weight_kg"] + beef_systems
         )
 
-        for sc in weight_df.index:
 
+        for sc in weight_df.index:
             sc_weight = 0
-            herd_slice = sc_herd_dataframe[
-                sc_herd_dataframe["Scenarios"] == sc
-            ]  # take slice of data
+            accumulated_weights = {beef_system: 0 for beef_system in beef_systems}
+            herd_slice = sc_herd_dataframe[sc_herd_dataframe["Scenarios"] == sc]
+
+            for beef_system in beef_systems:
+
+                for i in herd_slice.index:
+
+                    if herd_slice.loc[i, "cohort"] in export_weight_keys[beef_system]["Pop_Cohort"]:
+
+                        population = sc_herd_dataframe.loc[i, "pop"]
+
+                        if population != 0:
+
+                            birth_weight = weight_gain_cattle.loc[ef_country, "birth_weight"]
+
+                            wg_calves_lookup = export_weight_keys[beef_system]["Calf_LWG"]
+                            weight_gain_calves = weight_gain_cattle.loc[ef_country, wg_calves_lookup]
+
+                            wg_heifers_steers_less_2_year_lookup = export_weight_keys[beef_system]["Steer_Heifer_less_2_LWG"]
+                            weight_gain_steers_heifers_less_2_year = weight_gain_cattle.loc[ef_country, wg_heifers_steers_less_2_year_lookup]
+
+                            wg_heifers_steers_more_2_year_lookup = export_weight_keys[beef_system]["Steer_Heifer_more_2_LWG"]
+                            weight_gain_steers_heifers_more_2_year = weight_gain_cattle.loc[ef_country, wg_heifers_steers_more_2_year_lookup]
+
+                            sc_weight += (birth_weight + weight_gain_calves * 365 + \
+                                         weight_gain_steers_heifers_less_2_year * 365 + \
+                                         weight_gain_steers_heifers_more_2_year * 365) * population
+
+                            accumulated_weights[beef_system] += (birth_weight + weight_gain_calves * 365 + \
+                                         weight_gain_steers_heifers_less_2_year * 365 + \
+                                         weight_gain_steers_heifers_more_2_year * 365) * population
 
             weight_df.loc[sc, "Scenarios"] = sc
-            for i in herd_slice.index:  # iterate to the scenario
 
-                if herd_slice.loc[i, "cohort"] in export_weight_keys["calf_f"].keys():
-                    if sc_herd_dataframe.loc[i, "pop"] != 0:
+            weight_df.loc[sc, "carcass_weight_kg"] = sc_weight * carcass_weight_as_prop_of_LW
 
-                        sc_weight += (
-                            weight_gain_cattle.loc[ef_country, "birth_weight"]
-                            + (
-                                weight_gain_cattle.loc[
-                                    ef_country, herd_slice.loc[i, "cohort"] + "_weight_gain"
-                                ]
-                                * 365
-                            )
-                            + (
-                                weight_gain_cattle.loc[
-                                    ef_country,
-                                    export_weight_keys["calf_f"][
-                                        herd_slice.loc[i, "cohort"]
-                                    ]
-                                    + "_weight_gain",
-                                ]
-                                * 365
-                            )
-                        ) * herd_slice.loc[i, "pop"]
-
-                        weight_df.loc[
-                            sc,
-                            export_weight_keys["calf_f"][herd_slice.loc[i, "cohort"]]
-                            + "_kg",
-                        ] = (
-                            (
-                                weight_gain_cattle.loc[ef_country, "birth_weight"]
-                                + (
-                                    weight_gain_cattle.loc[
-                                        ef_country,
-                                        herd_slice.loc[i, "cohort"] + "_weight_gain",
-                                    ]
-                                    * 365
-                                )
-                                + (
-                                    weight_gain_cattle.loc[
-                                        ef_country,
-                                        export_weight_keys["calf_f"][
-                                            herd_slice.loc[i, "cohort"]
-                                        ]
-                                        + "_weight_gain",
-                                    ]
-                                    * 365
-                                )
-                            )
-                            * herd_slice.loc[i, "pop"]
-                        ) * carcass_weight_as_prop_of_LW
-
-                elif (
-                    sc_herd_dataframe.loc[i, "cohort"]
-                    in export_weight_keys["calf_m"].keys()
-                ):
-                    if sc_herd_dataframe.loc[i, "pop"] != 0:
-
-                        sc_weight += (
-                            weight_gain_cattle.loc[ef_country, "birth_weight"]
-                            + (
-                                weight_gain_cattle.loc[
-                                    ef_country, herd_slice.loc[i, "cohort"] + "_weight_gain"
-                                ]
-                                * 365
-                            )
-                            + (
-                                weight_gain_cattle.loc[
-                                    ef_country,
-                                    export_weight_keys["calf_m"][
-                                        herd_slice.loc[i, "cohort"]
-                                    ]
-                                    + "_weight_gain",
-                                ]
-                                * 365
-                            )
-                        ) * herd_slice.loc[i, "pop"]
-
-                        weight_df.loc[
-                            sc,
-                            export_weight_keys["calf_m"][herd_slice.loc[i, "cohort"]]
-                            + "_kg",
-                        ] = (
-                            (
-                                weight_gain_cattle.loc[ef_country, "birth_weight"]
-                                + (
-                                    weight_gain_cattle.loc[
-                                        ef_country,
-                                        herd_slice.loc[i, "cohort"] + "_weight_gain",
-                                    ]
-                                    * 365
-                                )
-                                + (
-                                    weight_gain_cattle.loc[
-                                        ef_country,
-                                        export_weight_keys["calf_m"][
-                                            herd_slice.loc[i, "cohort"]
-                                        ]
-                                        + "_weight_gain",
-                                    ]
-                                    * 365
-                                )
-                            )
-                            * herd_slice.loc[i, "pop"]
-                        ) * carcass_weight_as_prop_of_LW
-
-            weight_df.loc[sc, "carcass_weight_kg"] = (
-                sc_weight * carcass_weight_as_prop_of_LW
-            )
+            for beef_system in beef_systems:
+                weight_df.loc[sc, beef_system] = accumulated_weights[beef_system] * carcass_weight_as_prop_of_LW
 
         return weight_df
+
+
+    def compute_system_total_protein_exports(self, scenario_animal_data, baseline_animal_data):
+
+        """
+                total protein exported by the entire system, assuming a milk protein content of 3.5% and a beef protein content of 23%
+        """
+
+        df_index = list(baseline_animal_data.Scenarios.unique())
+        df_index.extend(scenario_animal_data.Scenarios.unique())
+        sc_herd_dataframe = pd.concat([scenario_animal_data, baseline_animal_data], ignore_index=True)
+
+        milk_protein_content = self.data_manager_class.milk_protein_content
+        beef_protein_content = self.data_manager_class.beef_protein_content
+
+        protein_system_export = pd.DataFrame(
+            index=df_index,
+            columns=["total_protein", "milk_protein", "beef_protein"])
+
+        for sc in protein_system_export.index:
+
+            milk_output = self.compute_system_milk_exports(scenario_animal_data,baseline_animal_data)
+            beef_output = self.compute_system_protien_exports(scenario_animal_data,baseline_animal_data)
+
+            protein_system_export.loc[sc, "milk_protein"] = milk_output.loc[sc, "total_milk_kg"] * milk_protein_content
+            protein_system_export.loc[sc, "beef_protein"] = beef_output.loc[sc, "carcass_weight_kg"] * beef_protein_content
+
+            protein_system_export.loc[sc, "total_protein"] = protein_system_export.loc[sc, "milk_protein"] + protein_system_export.loc[sc, "beef_protein"]
+
+
+        return protein_system_export

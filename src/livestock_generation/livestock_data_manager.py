@@ -86,16 +86,36 @@ class DataManager:
         }
 
         self.EXPORT_WEIGHT_KEYS = {
-            "calf_f": {
-                "DxD_calves_f": "DxD_heifers_less_2_yr",
-                "DxB_calves_f": "DxB_heifers_less_2_yr",
-                "BxB_calves_f": "BxB_heifers_less_2_yr",
+            "DxD_m":{"Pop_Cohort":"DxD_steers_less_2_yr",
+                     "Calf_LWG":"DxD_calves_m_weight_gain",
+                     "Steer_Heifer_less_2_LWG": "DxD_steers_less_2_yr_weight_gain",
+                     "Steer_Heifer_more_2_LWG": "DxD_steers_more_2_yr_weight_gain"
             },
-            "calf_m": {
-                "DxD_calves_m": "DxD_steers_less_2_yr",
-                "DxB_calves_m": "DxB_steers_less_2_yr",
-                "BxB_calves_m": "BxB_steers_less_2_yr",
+            "DxD_f":{"Pop_Cohort":"DxD_heifers_less_2_yr",
+                     "Calf_LWG":"DxD_calves_f_weight_gain",
+                     "Steer_Heifer_less_2_LWG": "DxD_heifers_less_2_yr_weight_gain",
+                     "Steer_Heifer_more_2_LWG": "DxD_heifers_more_2_yr_weight_gain"
             },
+            "DxB_m": {"Pop_Cohort": "DxB_steers_less_2_yr",
+                      "Calf_LWG": "DxB_calves_m_weight_gain",
+                      "Steer_Heifer_less_2_LWG": "DxB_steers_less_2_yr_weight_gain",
+                      "Steer_Heifer_more_2_LWG": "DxB_steers_more_2_yr_weight_gain"
+                      },
+            "DxB_f": {"Pop_Cohort": "DxB_heifers_less_2_yr",
+                      "Calf_LWG": "DxB_calves_f_weight_gain",
+                      "Steer_Heifer_less_2_LWG": "DxB_heifers_less_2_yr_weight_gain",
+                      "Steer_Heifer_more_2_LWG": "DxB_heifers_more_2_yr_weight_gain"
+                      },
+            "BxB_m": {"Pop_Cohort": "BxB_steers_less_2_yr",
+                      "Calf_LWG": "BxB_calves_m_weight_gain",
+                      "Steer_Heifer_less_2_LWG": "BxB_steers_less_2_yr_weight_gain",
+                      "Steer_Heifer_more_2_LWG": "BxB_steers_more_2_yr_weight_gain"
+                      },
+            "BxB_f": {"Pop_Cohort": "BxB_heifers_less_2_yr",
+                      "Calf_LWG": "BxB_calves_f_weight_gain",
+                      "Steer_Heifer_less_2_LWG": "BxB_heifers_less_2_yr_weight_gain",
+                      "Steer_Heifer_more_2_LWG": "BxB_heifers_more_2_yr_weight_gain"
+                      }
         }
 
         self.HERD_RELATION = {
@@ -240,6 +260,24 @@ class DataManager:
         self.cattle_systems = ["Dairy", "Beef"]
         self.sheep_systems = ["Lowland sheep", "Upland sheep"]
 
+        self.calf_weight_gain_lookup = {
+        ("DxD", "male"): "DxD_calves_m_weight_gain",
+        ("DxD", "female"): "DxD_calves_f_weight_gain",
+        ("DxB", "male"): "DxB_calves_m_weight_gain",
+        ("DxB", "female"): "DxB_calves_f_weight_gain",
+        ("BxB", "male"): "BxB_calves_m_weight_gain",
+        ("BxB", "female"): "BxB_calves_f_weight_gain",
+        }
+
+        self.steer_heifer_weight_gain_lookup = {
+            ("DxD", "male"): "DxD_steers_less_2_yr_weight_gain",
+            ("DxD", "female"): "DxD_heifers_less_2_yr_weight_gain",
+            ("DxB", "male"): "DxB_steers_less_2_yr_weight_gain",
+            ("DxB", "female"): "DxB_heifers_less_2_yr_weight_gain",
+            ("BxB", "male"): "BxB_steers_less_2_yr_weight_gain",
+            ("BxB", "female"): "BxB_heifers_less_2_yr_weight_gain",
+        }
+
         self.ANIMAL_SYSTEM_MAPPING = {
             "Dairy": "Dairy prod",
             "Beef": "Beef prod",
@@ -250,159 +288,180 @@ class DataManager:
         self.CATTLE_COHORT_WEIGHT = {
             "dairy_cows": {
                 "weight_column": "mature_weight_dairy_cows",
-                "mature":True,
-                "more_than_2_years":False,
+                "age": "mature",
+                "genetics": None,
+                "gender": "female",
                 "system":"Cattle"
             },
             "suckler_cows": {
                 "weight_column": "mature_weight_suckler_cows",
-                "mature":True,
-                "more_than_2_years":False,
+                "age": "mature",
+                "genetics": None,
+                "gender": "female",
                 "system":"Cattle"
             },
             "bulls": {
                 "weight_column": "mature_weight_bulls",
-                "mature":True,
-                "more_than_2_years":False,
+                "age": "mature",
+                "genetics": None,
+                "gender": "male",
                 "system":"Cattle"
             },
             "DxD_calves_f": {
                 "weight_column": "DxD_calves_f_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "calf",
+                "genetics": "DxD",
+                "gender": "female",
                 "system":"Cattle"
             },
             "DxD_calves_m": {
                 "weight_column": "DxD_calves_m_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "calf",
+                "genetics": "DxD",
+                "gender": "male",
                 "system":"Cattle"
             },
             "DxB_calves_f": {
                 "weight_column": "DxB_calves_f_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "calf",
+                "genetics": "DxB",
+                "gender": "female",
                 "system":"Cattle"
             },
             "DxB_calves_m": {
                 "weight_column": "DxB_calves_m_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "calf",
+                "genetics": "DxB",
+                "gender": "male",
                 "system":"Cattle"
             },
             "BxB_calves_f": {
                 "weight_column": "BxB_calves_f_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "calf",
+                "genetics": "BxB",
+                "gender": "female",
                 "system":"Cattle"
             },
             "BxB_calves_m": {
                 "weight_column": "BxB_calves_m_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "calf",
+                "genetics": "BxB",
+                "gender": "male",
                 "system":"Cattle"
             },
             "DxD_heifers_less_2_yr": {
                 "weight_column": "DxD_heifers_less_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "less_than_2_yr",
+                "genetics": "DxD",
+                "gender": "female",
                 "system":"Cattle"
             },
             "DxD_steers_less_2_yr": {
                 "weight_column": "DxD_steers_less_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "less_than_2_yr",
+                "genetics": "DxD",
+                "gender": "male",
                 "system":"Cattle"
             },
             "DxB_heifers_less_2_yr": {
                 "weight_column": "DxB_heifers_less_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "less_than_2_yr",
+                "genetics": "DxB",
+                "gender": "female",
                 "system":"Cattle"
             },
             "DxB_steers_less_2_yr": {
                 "weight_column": "DxB_steers_less_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "less_than_2_yr",
+                "genetics": "DxB",
+                "gender": "male",
                 "system":"Cattle"
             },
             "BxB_heifers_less_2_yr": {
                 "weight_column": "BxB_heifers_less_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "less_than_2_yr",
+                "genetics": "BxB",
+                "gender": "female",
                 "system":"Cattle"
             },
             "BxB_steers_less_2_yr": {
                 "weight_column": "BxB_steers_less_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":False,
+                "age": "less_than_2_yr",
+                "genetics": "BxB",
+                "gender": "male",
                 "system":"Cattle"
             },
             "DxD_heifers_more_2_yr": {
                 "weight_column": "DxD_heifers_more_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":True,
+                "age": "more_than_2_yr",
+                "genetics": "DxD",
+                "gender": "female",
                 "system":"Cattle"
             },
             "DxD_steers_more_2_yr": {
                 "weight_column": "DxD_steers_more_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":True,
+                "age": "more_than_2_yr",
+                "genetics": "DxD",
+                "gender": "male",
                 "system":"Cattle"
             },
             "DxB_heifers_more_2_yr": {
                 "weight_column": "DxB_heifers_more_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":True,
+                "age": "more_than_2_yr",
+                "genetics": "DxB",
+                "gender": "female",
                 "system":"Cattle"
             },
             "DxB_steers_more_2_yr": {
                 "weight_column": "DxB_steers_more_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":True,
+                "age": "more_than_2_yr",
+                "genetics": "DxB",
+                "gender": "male",
                 "system":"Cattle"
             },
             "BxB_heifers_more_2_yr": {
                 "weight_column": "BxB_heifers_more_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":True,
+                "age": "more_than_2_yr",
+                "genetics": "BxB",
+                "gender": "female",
                 "system":"Cattle"
             },
             "BxB_steers_more_2_yr": {
                 "weight_column": "BxB_steers_more_2_yr_weight_gain",
-                "mature":False,
-                "more_than_2_years":True,
+                "age": "more_than_2_yr",
+                "genetics": "BxB",
+                "gender": "male",
                 "system":"Cattle"
                 
             },
             "ewes": {
                 "weight_column": "mature_weight_female",
                 "system":"Sheep",
-                "mature":True
+                "age": "mature"
                 
             },
             "ram": {
                 "weight_column": "mature_weight_male",
                 "system":"Sheep",
-                "mature":True
+                "age": "mature"
                 
             },
             "lamb_less_1_yr": {
                 "weight_column": "lamb_less_1_yr_weight_after_weaning",
                 "system":"Sheep",
-                "mature":False
+                "age": "immature"
                 
             },
             "lamb_more_1_yr": {
                 "weight_column": "lamb_more_1_yr_weight",
                 "system":"Sheep",
-                "mature":False
+                "age": "immature"
                 
             },
             "male_less_1_yr": {
                 "weight_column": "lamb_less_1_yr_weight_after_weaning",
                 "system":"Sheep",
-                "mature":False
+                "age": "immature"
                 
             }
         }
@@ -413,6 +472,10 @@ class DataManager:
         self.suckler_daily_milk_baseline = 1.410958904 #kg per day
 
         self.carcass_weight_as_prop_of_LW = 0.521
+
+        self.milk_protein_content = 0.035
+
+        self.beef_protein_content = 0.23
 
         self.sheep_system_dict = {"Lowland": "flat_", "Upland": "hilly_"}
 

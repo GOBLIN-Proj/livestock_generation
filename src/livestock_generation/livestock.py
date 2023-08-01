@@ -226,6 +226,8 @@ class AnimalData:
         herd_data_frame = self.cohorts_class.compute_cohort_population_in_scenarios_for_year()
 
         weight_gain_cattle = self.loader_class.weight_gain_cattle()
+        calf_weight_gains = self.data_manager_class.calf_weight_gain_lookup #Daniel
+        steer_heifer_weight_gains = self.data_manager_class.steer_heifer_weight_gain_lookup #Daniel
         weight_gain_sheep = self.loader_class.weight_gain_sheep()
 
         sheep_system_dict = self.data_manager_class.sheep_system_dict
@@ -304,19 +306,38 @@ class AnimalData:
                         #Weights
                         weight_col = cohort_weight[data.loc[new_index, "cohort"]]["weight_column"]
                         weight_gain = weight_gain_cattle.loc[ef_country, weight_col]
+                        age = cohort_weight[data.loc[new_index, "cohort"]]["age"]
+                        genetics = cohort_weight[data.loc[new_index, "cohort"]]["genetics"]
+                        gender = cohort_weight[data.loc[new_index, "cohort"]]["gender"]
 
-                        if cohort_weight[data.loc[new_index, "cohort"]]["mature"]:
+                        if age == "mature":
                             weight = weight_gain
-                        elif cohort_weight[data.loc[new_index, "cohort"]]["more_than_2_years"]:
+
+                        elif age == "calf":
+
                             weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + (weight_gain * 365) / 2
-                        else:
-                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + (weight_gain * 365)
+
+                        elif age == "less_than_2_yr":
+
+                            weight_gain_calves = weight_gain_cattle.loc[ef_country, calf_weight_gains[(genetics, gender)]]
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + weight_gain_calves * 365 + \
+                                     (weight_gain * 365) / 2
+
+                        elif age == "more_than_2_yr":
+
+                            weight_gain_calves = weight_gain_cattle.loc[ef_country, calf_weight_gains[(genetics, gender)]]
+                            weight_gain_steers_heifers = weight_gain_cattle.loc[ef_country, steer_heifer_weight_gains[(genetics, gender)]]
+                            weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + weight_gain_calves * 365 + \
+                                     weight_gain_steers_heifers * 365 + (weight_gain * 365) / 2
 
                         data.loc[new_index, "weight"] = weight
+
+
+
                     else:
                         weight_col = cohort_weight[data.loc[new_index, "cohort"]]["weight_column"]
                         weight_gain = weight_gain_sheep.loc[ef_country, weight_col]
-                        if cohort_weight[data.loc[new_index, "cohort"]]["mature"]:
+                        if cohort_weight[data.loc[new_index, "cohort"]]["age"] == "mature":
                             weight = weight_gain
                         else: 
                             weight = weight_gain_sheep.loc[ef_country, "lamb_weight_at_birth"] + weight_gain
@@ -416,6 +437,8 @@ class AnimalData:
         herd_data_frame = self.cohorts_class.compute_cohort_population_in_baseline()
 
         weight_gain_cattle = self.loader_class.weight_gain_cattle()
+        calf_weight_gains = self.data_manager_class.calf_weight_gain_lookup #Daniel
+        steer_heifer_weight_gains = self.data_manager_class.steer_heifer_weight_gain_lookup #Daniel
         weight_gain_sheep = self.loader_class.weight_gain_sheep()
 
         sheep_system_dict = self.data_manager_class.sheep_system_dict
@@ -455,25 +478,42 @@ class AnimalData:
                 #Weights
                 weight_col = cohort_weight[data.loc[new_index, "cohort"]]["weight_column"]
                 weight_gain = weight_gain_cattle.loc[ef_country, weight_col]
+                age = cohort_weight[data.loc[new_index, "cohort"]]["age"]
+                genetics = cohort_weight[data.loc[new_index, "cohort"]]["genetics"]
+                gender = cohort_weight[data.loc[new_index, "cohort"]]["gender"]
 
-                if cohort_weight[data.loc[new_index, "cohort"]]["mature"]:
+
+                if age == "mature":
                     weight = weight_gain
-                elif cohort_weight[data.loc[new_index, "cohort"]]["more_than_2_years"]:
+
+                elif age == "calf":
+
                     weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + (weight_gain * 365) / 2
-                else:
-                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + (weight_gain * 365)
+
+                elif age == "less_than_2_yr":
+
+                    weight_gain_calves = weight_gain_cattle.loc[ef_country, calf_weight_gains[(genetics, gender)]]
+                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + weight_gain_calves * 365 + \
+                            (weight_gain * 365) / 2
+
+                elif age == "more_than_2_yr":
+
+                    weight_gain_calves = weight_gain_cattle.loc[ef_country, calf_weight_gains[(genetics, gender)]]
+                    weight_gain_steers_heifers = weight_gain_cattle.loc[ef_country, steer_heifer_weight_gains[(genetics, gender)]]
+                    weight = weight_gain_cattle.loc[ef_country, "birth_weight"] + weight_gain_calves * 365 + \
+                            weight_gain_steers_heifers * 365 + (weight_gain * 365) / 2
 
                 data.loc[new_index, "weight"] = weight
+
             else:
                 weight_col = cohort_weight[data.loc[new_index, "cohort"]]["weight_column"]
                 weight_gain = weight_gain_sheep.loc[ef_country, weight_col]
-                if cohort_weight[data.loc[new_index, "cohort"]]["mature"]:
+                if cohort_weight[data.loc[new_index, "cohort"]]["age"] == "mature":
                     weight = weight_gain
-                else: 
+                else:
                     weight = weight_gain_sheep.loc[ef_country, "lamb_weight_at_birth"] + weight_gain
 
                 data.loc[new_index, "weight"] = weight
-
 
             if data.loc[new_index, "cohort"] in cohort_dict["Cattle"]:
                 data.loc[new_index, "forage"] = system_params["Cattle"]["forage"]
