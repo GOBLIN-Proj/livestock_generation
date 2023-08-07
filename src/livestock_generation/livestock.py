@@ -527,20 +527,23 @@ class AnimalData:
                         )
                 data.loc[new_index, "con_type"] = system_params["Sheep"]["con_type"]
 
-            if data.loc[new_index, "cohort"] in cohort_name_dict[animal]:
-                
-                data.loc[new_index, "con_amount"] = system_params["Sheep"]["concentrate"]
-                data.loc[new_index, "wool"] = system_params["Sheep"]["wool"]
-
-            elif data.loc[new_index, "cohort"] in cohort_dict["Cattle"]:
+            if data.loc[new_index, "cohort"] in cohort_dict["Cattle"]:
 
                 con_amount = self.compute_concentrate(
                     data.loc[new_index, "cohort"],
                     data.loc[new_index, "daily_milk"],
                     data.loc[new_index, "weight"],
                 )
+
                 data.loc[new_index, "con_amount"] = con_amount
                 data.loc[new_index, "wool"] = 0
+
+            else:
+                
+                data.loc[new_index, "con_amount"] = system_params["Sheep"]["concentrate"]
+                data.loc[new_index, "wool"] = system_params["Sheep"]["wool"]
+
+
 
             if data.loc[new_index, "cohort"] in cohort_dict["Cattle"]:
                 if (
