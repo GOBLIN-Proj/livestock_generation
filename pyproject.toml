@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "livestock_generation"
-version = "0.1.0"
+version = "0.1.1"
 description = "A tool that uses Ireland specific data to generate a baseline and scenario livestock herds for sheep and cattle."
 authors = ["Colm Duffy"]
 license = "MIT"
@@ -8,8 +8,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pandas = "^1.3.0"
-numpy = "^1.21.0"
+pandas = "^2.0.3"
+numpy = "^1.25.2"
 seaborn = "^0.11.2"
 matplotlib = "^3.4.3"
 sqlalchemy = "^1.4.0"

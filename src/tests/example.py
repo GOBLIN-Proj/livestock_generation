@@ -1,42 +1,16 @@
 from livestock_generation.livestock import AnimalData
 from livestock_generation.livestock_exports import Exports
 import pandas as pd
-
+import os
 
 def main():
     # Create the DataFrame with the provided data, this represents scenario inputs
-    data = [
-        [0, "Dairy", "tank solid", 0, 0, 0, 0, 0, 0, 0, 0.801458098547012,
-         0.36840211684271, 0.0555663357895664, 0.126070113756632, 0, 0, 0.0784928061838073, 0.120049095269181, 0,
-         0.0879200186051467, 0, 0, 0, 0, 136.870524806694, 105.00171069052, 0.591628596827221, 2080],
-        [0, "Dairy", "tank liquid", 1555000, 0, 0, 0, 0, 0, 0, 0.801458098547012,
-         0.36840211684271, 0.0555663357895664, 0.126070113756632, 0, 0, 0.0784928061838073, 0.120049095269181, 0,
-         0.0879200186051467, 0, 0, 0, 0, 136.870524806694, 105.00171069052, 0.591628596827221, 2080],
-        [0, "Beef", "tank solid", 0, 0, 0, 0, 0, 0, 0, 0.801458098547012,
-         0.36840211684271, 0.0555663357895664, 0.126070113756632, 0, 0, 0.0784928061838073, 0.120049095269181, 0,
-         0.0879200186051467, 0, 0, 0, 0, 136.870524806694, 105.00171069052, 0.591628596827221, 2080],
-        [0, "Beef", "tank liquid", 0, 915000, 0, 0, 0, 0, 0,
-         0.801458098547012, 0.36840211684271, 0.0555663357895664, 0.126070113756632, 0, 0, 0.0784928061838073,
-         0.120049095269181, 0, 0.0879200186051467, 0, 0, 0, 0, 136.870524806694, 105.00171069052, 0.591628596827221,
-         2080],
-        [0, "Lowland sheep", "tank liquid", 0, 0, 0, 0, 0, 0, 0, 0.801458098547012,
-         0.36840211684271, 0.0555663357895664, 0.126070113756632, 0, 0, 0.0784928061838073, 0.120049095269181, 0,
-         0.0879200186051467, 0, 0, 2045000, 0, 136.870524806694, 105.00171069052, 0.591628596827221, 2080],
-        [0, "Upland sheep", "tank liquid", 0, 0, 0, 0, 0, 0, 0, 0.801458098547012,
-         0.36840211684271, 0.0555663357895664, 0.126070113756632, 0, 0, 0.0784928061838073, 0.120049095269181, 0,
-         0.0879200186051467, 511000, 0, 0, 0, 136.870524806694, 105.00171069052, 0.591628596827221, 2080]
-    ]
+    path = "./data/"
 
-    columns = ["Scenarios", "Cattle systems", "Manure management", "Dairy pop", "Beef pop", "Dairy prod", "Beef prod",
-               "mm_storage", "Cattle EF", "AD prod", "Forest area", "Conifer proportion", "Conifer harvest",
-               "Conifer thinned", "Broadleaf harvest", "Bioenergy area", "Crop area", "Wetland area", "Land rewetting",
-               "Grass management", "Upland sheep pop", "Upland sheep prod", "Lowland sheep pop", "Lowland sheep prod",
-               "Dairy Pasture fertilisation", "Beef Pasture fertilisation", "Broadleaf proportion", "Afforest Year"]
-
-    scenario_dataframe = pd.DataFrame(data, columns=columns)
+    scenario_dataframe = pd.read_csv(os.path.join(path, "scenario_input_dataframe.csv"))
 
     # create additional parameters
-    baseline_year = 2018
+    baseline_year = 2020
     target_year = 2050
     ef_country = "ireland"
 
@@ -49,6 +23,8 @@ def main():
 
     # create dataframe for scenarios animals
     scenario_data = animal_class.create_animal_dataframe()
+
+    scenario_data.to_csv("./data/example_scenario_animal_data_test.csv")
 
     # Create dataframes for beef and milk output
     beef_outputs = export_class.compute_system_protien_exports(scenario_data, baseline_data)

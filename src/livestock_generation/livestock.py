@@ -415,11 +415,7 @@ class AnimalData:
                             ],
                         )
 
-                    if animal_type == "Sheep":
-                        data.loc[new_index, "mm_storage"] = system_params[animal_type]["manure_management"]
-                    else:
-                        data.loc[new_index, "mm_storage"] = row.iloc[2]
-
+                    data.loc[new_index, "mm_storage"] = row.loc["Manure management"]
                     data.loc[new_index, "daily_spreading"] = system_params[animal_type]["daily_spread"]
                     data.loc[new_index, "n_sold"] = 0
                     data.loc[new_index, "n_bought"] = 0
