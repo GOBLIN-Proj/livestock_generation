@@ -1,4 +1,5 @@
-from livestock_generation.livestock import Cohorts
+from livestock_generation.livestock import AnimalData
+from livestock_generation.livestock_exports import Exports
 import unittest
 import pandas as pd
 
@@ -20,17 +21,23 @@ class CohortsDataTestCase(unittest.TestCase):
         
         self.data_frame = pd.DataFrame(data, columns=columns)
     
-        self.cohorts_class = Cohorts("ireland",2020, 2050, self.data_frame)
-
+        self.animal_class = AnimalData("ireland", 2018, 2050, self.data_frame)
+        self.export_class = Exports("ireland", 2018, 2050, self.data_frame)
         
 
     def test_cohorts_data(self):
+        
+        baseline_data = self.animal_class.create_baseline_animal_dataframe()
 
-        scenario_data = self.cohorts_class.compute_cohort_population_in_scenarios_for_year()
+        scenario_data = self.animal_class.create_animal_dataframe()
 
-        print(self.cohorts_class.cohort_name_conversion(self.data_frame))
+        
 
-        scenario_data.to_csv("./data/scenario_cohort_data_test.csv")
+        test = self.export_class.compute_system_protien_exports(scenario_data, baseline_data)
+
+        test.to_csv("./data/herd.csv")
+
+        scenario_data.to_csv("./data/scenario_animal_data_test.csv")
 
 
 if __name__ == "__main__":
