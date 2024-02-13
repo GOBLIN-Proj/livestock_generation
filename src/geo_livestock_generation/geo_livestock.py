@@ -1,9 +1,9 @@
 """
-============================
-Livestock Generation Module
-============================
+===============================
+Geo Livestock Generation Module
+===============================
 
-This module is responsible for generating national livestock data,
+This module is responsible for generating geographic-specific livestock data,
 including the management of cohorts, animal data calculations, and scenario-based
 projections for agricultural systems. It utilizes various data sources and
 models to compute exports, productivity, and sustainability metrics for livestock
@@ -12,6 +12,7 @@ production under different environmental and management scenarios.
 from resource_manager.data_loader import Loader
 from resource_manager.livestock_data_manager import DataManager
 from resource_manager.scenario_fetcher import ScenarioDataFetcher
+from catchment_data_api.cohorts import Cohorts as CatchmentCohorts
 import pandas as pd
 import numpy as np
 
@@ -179,50 +180,18 @@ class Cohorts:
         return scenario_herd
     
 
-    def compute_cohort_population_in_baseline(self):
-        """
-        Computes the cohort populations for baseline (calibration year), adjusting for
-        different animal systems and their relationships.
-        
-        Returns:
-            pd.DataFrame: A DataFrame with cohort populations for each scenario.
-        """
-
-        cohort_list =[]
-        cohort_list.extend(self.data_manager_class.COHORTS_DICT["Cattle"])
-        cohort_list.extend(self.data_manager_class.COHORTS_DICT["Sheep"])
-
-        calibration_year = self.calibration_year
-        
-        baseline_herd = pd.DataFrame(index = [calibration_year], columns=cohort_list)
-        
-   
-        baseline_dict =self.generate_baseline_cohorts_dictionary()
-
-        
-        for cohort in cohort_list:
-            baseline_herd.loc[calibration_year,cohort] = baseline_dict[cohort]
-                    
-            
-        return baseline_herd
     
 
 class AnimalData:
     """
-    Manages and calculates animal-related data for livestock systems, including
-    scenario-based projections and baseline conditions.
+    A class for managing animal data within a livestock system. It handles the creation of
+    animal data DataFrames for different scenarios and baseline conditions.
     
     Attributes:
-        sc_class (ScenarioDataFetcher): Fetches scenario data.
-        scenario_inputs_df (DataFrame): DataFrame of scenario inputs.
-        loader_class (Loader): Loads necessary data.
-        data_manager_class (DataManager): Manages livestock data.
-        cohorts_class (Cohorts): Manages cohorts data.
-        target_year (int): Target year for the analysis.
-        calibration_year (int): Calibration year for the analysis.
-        ef_country (str): Country code for the analysis.
+        cohorts_class (Cohorts): Instance of Cohorts class for cohort management.
+        catchment (str): The catchment name obtained from scenario data.
+        cohorts_api_class (CatchmentCohorts): Instance of CatchmentCohorts class for catchment data.
     """
-    
     def __init__(self, ef_country, calibration_year, target_year, scenario_inputs_df):
 
         self.sc_class = ScenarioDataFetcher(scenario_inputs_df)
@@ -230,6 +199,8 @@ class AnimalData:
         self.loader_class = Loader(ef_country)
         self.data_manager_class = DataManager(ef_country, calibration_year, target_year)
         self.cohorts_class = Cohorts(ef_country, calibration_year, target_year, scenario_inputs_df)
+        self.catchment = self.sc_class.get_catchment_name()
+        self.cohorts_api_class = CatchmentCohorts(self.catchment)
         self.target_year = target_year
         self.calibration_year = calibration_year
         self.ef_country = ef_country
@@ -241,17 +212,16 @@ class AnimalData:
         coef_for_parameter_from_scenario,
     ):
         """
-        Retrieves and calculates a specific element from productivity data based on given parameters.
+        Retrieves a specific parameter related to animal productivity, adjusted by a coefficient.
         
         Args:
-            lca_parameter_name (str): Name of the LCA parameter.
-            goblin_parameter_name (str): Name of the Goblin parameter.
-            coef_for_parameter_from_scenario (float): Coefficient for parameter adjustment.
-            
+            lca_parameter_name (str): The name of the LCA parameter to retrieve.
+            goblin_parameter_name (str): The name of the Goblin parameter to match.
+            coef_for_parameter_from_scenario (float): The coefficient to adjust the parameter value.
+        
         Returns:
-            float: Adjusted parameter value.
+            float: The adjusted parameter value.
         """
-
         parameter_data_base = self.loader_class.parameter_data()
 
         lca_parameter_mask = parameter_data_base["LCAparameter"] == lca_parameter_name
@@ -263,18 +233,18 @@ class AnimalData:
             float(
                 parameter_data_base.loc[
                     lca_parameter_mask & goblin_parameter_mask, "Min"
-                ].values[0]
+                ].item()
             )
             + (
                 float(
                     parameter_data_base.loc[
                         lca_parameter_mask & goblin_parameter_mask, "Max"
-                    ].values[0]
+                    ].item()
                 )
                 - float(
                     parameter_data_base.loc[
                         lca_parameter_mask & goblin_parameter_mask, "Min"
-                    ].values[0]
+                    ].item()
                 )
             )
             * coef_for_parameter_from_scenario
@@ -289,11 +259,11 @@ class AnimalData:
         
         Args:
             cohort (str): The cohort for which to compute concentrate.
-            milk (float): Milk production value.
-            weight (float): Weight of the animals in the cohort.
-            
+            milk (float): The milk production value.
+            weight (float): The weight of the animals in the cohort.
+        
         Returns:
-            float: Concentrate requirement.
+            float: The concentrate requirement.
         """
         con_dict = self.data_manager_class.COHORTS_CONCENTRATE
         df = self.loader_class.concentrate_per_animal_dataframe()
@@ -317,9 +287,8 @@ class AnimalData:
         Creates a DataFrame containing detailed animal data for each scenario.
         
         Returns:
-            DataFrame: A DataFrame with detailed animal data for scenarios.
+            pd.DataFrame: A DataFrame with animal data for scenarios.
         """
-
         scenario_data_frame = self.scenario_inputs_df
         cohort_dict = self.data_manager_class.COHORTS_DICT
         cohort_name_dict = self.data_manager_class.COHORT_NAME_DICT
@@ -375,6 +344,7 @@ class AnimalData:
                     data.loc[new_index, "ef_country"] = ef_country
                     data.loc[new_index, "farm_id"] = int(index)
                     data.loc[new_index, "Scenarios"] = int(row["Scenarios"])
+                    data.loc[new_index,"Catchment"] = row["Catchment"]
                     data.loc[new_index, "year"] = int(target_year)
                     data.loc[new_index, "cohort"] = cohort_name_dict[
                         animal_category
@@ -520,7 +490,7 @@ class AnimalData:
                     data.loc[new_index, "daily_spreading"] = system_params[animal_type]["daily_spread"]
                     data.loc[new_index, "n_sold"] = 0
                     data.loc[new_index, "n_bought"] = 0
-
+                    
                     new_index += 1
         return data
 
@@ -530,13 +500,13 @@ class AnimalData:
         Creates a DataFrame containing detailed animal data for the baseline condition.
         
         Returns:
-            DataFrame: A DataFrame with baseline animal data.
+            pd.DataFrame: A DataFrame with baseline animal data.
         """
         cohort_dict = self.data_manager_class.COHORTS_DICT
         cohort_name_dict = self.data_manager_class.COHORT_NAME_DICT
 
         calibration_year = self.calibration_year
-        herd_data_frame = self.cohorts_class.compute_cohort_population_in_baseline()
+        herd_data_frame = self.cohorts_api_class.compute_cohort_population_in_catchment()
 
         weight_gain_cattle = self.loader_class.weight_gain_cattle()
         calf_weight_gains = self.data_manager_class.calf_weight_gain_lookup #Daniel
@@ -564,6 +534,7 @@ class AnimalData:
             data.loc[new_index, "ef_country"] = ef_country
             data.loc[new_index, "farm_id"] = int(calibration_year)
             data.loc[new_index, "Scenarios"] = -1
+            data.loc[new_index,"Catchment"] = self.catchment
             data.loc[new_index, "year"] = int(calibration_year)
             data.loc[new_index, "cohort"] = cohort_name_dict[animal]
             data.loc[new_index, "pop"] = herd_data_frame.loc[calibration_year,animal]

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "livestock_generation"
-version = "0.1.1"
+version = "0.2.0"
 description = "A tool that uses Ireland specific data to generate a baseline and scenario livestock herds for sheep and cattle."
 authors = ["Colm Duffy"]
 license = "MIT"
@@ -10,9 +10,8 @@ readme = "README.md"
 python = "^3.9"
 pandas = "2.1.4"
 numpy = "^1.25.0"
-seaborn = "^0.13.1"
-matplotlib = "^3.4.3"
 sqlalchemy = "^1.4.0"
+catchment_data_api = {git = "https://github.com/colmduff/catchment_data_api.git", branch = "main"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

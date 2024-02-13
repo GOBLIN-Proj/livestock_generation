@@ -1,0 +1,221 @@
+:py:mod:`livestock_generation.livestock`
+========================================
+
+.. py:module:: livestock_generation.livestock
+
+.. autoapi-nested-parse::
+
+   ============================
+   Livestock Generation Module
+   ============================
+
+   This module is responsible for generating national livestock data,
+   including the management of cohorts, animal data calculations, and scenario-based
+   projections for agricultural systems. It utilizes various data sources and
+   models to compute exports, productivity, and sustainability metrics for livestock
+   production under different environmental and management scenarios.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   livestock_generation.livestock.Cohorts
+   livestock_generation.livestock.AnimalData
+
+
+
+
+.. py:class:: Cohorts(ef_country, calibration_year, target_year, scenario_inputs_df)
+
+
+   A class for managing cohorts within a livestock system. It generates dictionaries
+   for cohorts and baseline cohorts, handles name conversions, and computes population
+   coefficients and population in scenarios for a given year.
+
+   .. attribute:: sc_class
+
+      Instance for fetching scenario data.
+
+      :type: ScenarioDataFetcher
+
+   .. attribute:: loader_class
+
+      Instance for loading necessary data.
+
+      :type: Loader
+
+   .. attribute:: data_manager_class
+
+      Instance for managing livestock data.
+
+      :type: DataManager
+
+   .. attribute:: calibration_year
+
+      Calibration year for the analysis.
+
+      :type: int
+
+   .. py:method:: generate_cohorts_dictionary()
+
+      Generates a dictionary of cohorts from cattle herd data with aggregated values.
+
+      :returns: A dictionary with cohort names as keys and aggregated data as values.
+      :rtype: dict
+
+
+   .. py:method:: generate_baseline_cohorts_dictionary()
+
+      Generates a baseline dictionary of cohorts using the calibration year or a default
+      if data for the calibration year is not available.
+
+      :returns: A dictionary with cohort names as keys and population data as values for the baseline year.
+      :rtype: dict
+
+
+   .. py:method:: cohort_name_conversion(df)
+
+      Converts the cohort names in a DataFrame according to a predefined conversion dictionary.
+
+      :param df: The DataFrame with cohort names to be converted.
+      :type df: pd.DataFrame
+
+      :returns: The DataFrame with converted cohort names.
+      :rtype: pd.DataFrame
+
+
+   .. py:method:: compute_coef_cohort_population()
+
+      Computes the coefficients for cohort populations based on the relationship of individual cohorts
+      to the total population of beef and dairy adults.
+
+      :returns: A dictionary with cohort names as keys and their population coefficients as values.
+      :rtype: dict
+
+
+   .. py:method:: compute_cohort_population_in_scenarios_for_year()
+
+      Computes the cohort populations for each scenario in the target year, adjusting for
+      different animal systems and their relationships.
+
+      :returns: A DataFrame with cohort populations for each scenario.
+      :rtype: pd.DataFrame
+
+
+   .. py:method:: compute_cohort_population_in_baseline()
+
+      Computes the cohort populations for baseline (calibration year), adjusting for
+      different animal systems and their relationships.
+
+      :returns: A DataFrame with cohort populations for each scenario.
+      :rtype: pd.DataFrame
+
+
+
+.. py:class:: AnimalData(ef_country, calibration_year, target_year, scenario_inputs_df)
+
+
+   Manages and calculates animal-related data for livestock systems, including
+   scenario-based projections and baseline conditions.
+
+   .. attribute:: sc_class
+
+      Fetches scenario data.
+
+      :type: ScenarioDataFetcher
+
+   .. attribute:: scenario_inputs_df
+
+      DataFrame of scenario inputs.
+
+      :type: DataFrame
+
+   .. attribute:: loader_class
+
+      Loads necessary data.
+
+      :type: Loader
+
+   .. attribute:: data_manager_class
+
+      Manages livestock data.
+
+      :type: DataManager
+
+   .. attribute:: cohorts_class
+
+      Manages cohorts data.
+
+      :type: Cohorts
+
+   .. attribute:: target_year
+
+      Target year for the analysis.
+
+      :type: int
+
+   .. attribute:: calibration_year
+
+      Calibration year for the analysis.
+
+      :type: int
+
+   .. attribute:: ef_country
+
+      Country code for the analysis.
+
+      :type: str
+
+   .. py:method:: get_element_from_productivity(lca_parameter_name, goblin_parameter_name, coef_for_parameter_from_scenario)
+
+      Retrieves and calculates a specific element from productivity data based on given parameters.
+
+      :param lca_parameter_name: Name of the LCA parameter.
+      :type lca_parameter_name: str
+      :param goblin_parameter_name: Name of the Goblin parameter.
+      :type goblin_parameter_name: str
+      :param coef_for_parameter_from_scenario: Coefficient for parameter adjustment.
+      :type coef_for_parameter_from_scenario: float
+
+      :returns: Adjusted parameter value.
+      :rtype: float
+
+
+   .. py:method:: compute_concentrate(cohort, milk, weight)
+
+      Computes the concentrate requirement for a given cohort based on milk production and weight.
+
+      :param cohort: The cohort for which to compute concentrate.
+      :type cohort: str
+      :param milk: Milk production value.
+      :type milk: float
+      :param weight: Weight of the animals in the cohort.
+      :type weight: float
+
+      :returns: Concentrate requirement.
+      :rtype: float
+
+
+   .. py:method:: create_animal_dataframe()
+
+      Creates a DataFrame containing detailed animal data for each scenario.
+
+      :returns: A DataFrame with detailed animal data for scenarios.
+      :rtype: DataFrame
+
+
+   .. py:method:: create_baseline_animal_dataframe()
+
+      Creates a DataFrame containing detailed animal data for the baseline condition.
+
+      :returns: A DataFrame with baseline animal data.
+      :rtype: DataFrame
+
+
+

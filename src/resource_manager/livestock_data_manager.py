@@ -1,10 +1,53 @@
+"""
+===========
+DataManager
+===========
 
-from livestock_generation.data_loader import Loader
+The DataManager class is responsible for managing access to various datasets and configurations necessary for livestock data analysis, 
+including cohort definitions, weight gain data, concentrate requirements, and other parameters.
+"""
+from resource_manager.data_loader import Loader
 
 
 class DataManager:
+    """
+    Manages access to various datasets and configurations necessary for livestock data analysis,
+    including cohort definitions, weight gain data, concentrate requirements, and other parameters.
 
-    def __init__(self, ef_country, calibration_year, target_year, scenario_inputs_df):
+    Attributes:
+        loader_class (Loader): An instance of Loader to access the database.
+        calibration_year (int): The year used for calibration in the analysis.
+        default_calibration_year (int): A default year used when calibration year data is unavailable.
+        target_year (int): The year for which the data analysis is targeted.
+        cohort_name_conversion_dict (dict): A mapping of descriptive cohort names to their identifiers.
+        COHORTS_DICT (dict): A dictionary categorizing cohorts into broader groups like Cattle and Sheep.
+        DAIRY_BEEF_COHORTS (dict): Distinguishes between Dairy and Beef cohorts.
+        EXPORT_WEIGHT_KEYS (dict): Mapping keys for exporting weight data.
+        HERD_RELATION (dict): Defines relationships between different cohorts within the herd.
+        COHORT_NAME_DICT (dict): A direct mapping of cohort identifiers for easy reference.
+        COHORT_TIME_INDOORS (dict): Specifies the time spent indoors for each cohort.
+        COHORTS_CONCENTRATE (dict): Defines which cohorts are fed concentrates.
+        systems (list): A list of system types (e.g., Cattle, Sheep).
+        cattle_systems (list): A list of cattle system types.
+        sheep_systems (list): A list of sheep system types.
+        calf_weight_gain_lookup (dict): Lookup for weight gain data for calves.
+        steer_heifer_weight_gain_lookup (dict): Lookup for weight gain data for steers and heifers.
+        ANIMAL_SYSTEM_MAPPING (dict): Mapping of animal systems to production types.
+        CATTLE_COHORT_WEIGHT (dict): Weight information for cattle cohorts.
+        dairy_daily_milk_baseline (float): Baseline daily milk production for dairy cows.
+        suckler_daily_milk_baseline (float): Baseline daily milk production for suckler cows.
+        carcass_weight_as_prop_of_LW (float): Proportion of carcass weight to live weight.
+        milk_protein_content (float): Milk protein content percentage.
+        beef_protein_content (float): Beef protein content percentage.
+        sheep_system_dict (dict): Dictionary mapping sheep systems to their respective types.
+        system_parameters (dict): Parameters for different systems (Cattle, Sheep).
+
+    Args:
+        ef_country (str): The country code for which the data is tailored.
+        calibration_year (int): The year used for calibration purposes.
+        target_year (int): The year for which the analysis is conducted.
+    """
+    def __init__(self, ef_country, calibration_year, target_year):
 
         self.loader_class = Loader(ef_country)
 
@@ -498,7 +541,5 @@ class DataManager:
             }
         }
 
-
-        self.scenario_inputs_df = scenario_inputs_df
 
 
