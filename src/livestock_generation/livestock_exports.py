@@ -1,19 +1,54 @@
+"""
+=====================
+Livestock Exports
+=====================
+This module contains a class to calculate exports of milk, protein, and total protein from a livestock system under different scenarios.
 
+The class `Exports` contains methods to calculate the total kilograms of milk exported for each scenario, the total beef weight exported 
+from the entire system for each scenario, and the total protein exported by the entire system, assuming specific milk and beef protein contents.
+
+"""
 import pandas as pd
-from livestock_generation.livestock_data_manager import DataManager
-from livestock_generation.data_loader import Loader
+from resource_manager.livestock_data_manager import DataManager
+from resource_manager.scenario_fetcher import ScenarioDataFetcher
+from resource_manager.data_loader import Loader
 
 
     
 class Exports:
+    """
+    A class to calculate exports of milk, protein, and total protein from a livestock system under different scenarios.
+    
+    Attributes:
+        sc_class (ScenarioDataFetcher): An instance for fetching scenario data.
+        loader_class (Loader): An instance for loading necessary data.
+        data_manager_class (DataManager): An instance for managing livestock data.
+        ef_country (str): The country code for export calculations.
+    
+    Args:
+        ef_country (str): The country code for which the exports are being calculated.
+        calibration_year (int): The year used for calibration purposes in the analysis.
+        target_year (int): The year for which the exports are being calculated.
+        scenario_inputs_df (DataFrame): A pandas DataFrame containing scenario inputs necessary for calculations.
+    """
     def __init__(self,ef_country, calibration_year, target_year, scenario_inputs_df):
+        self.sc_class = ScenarioDataFetcher(scenario_inputs_df)
         self.loader_class = Loader(ef_country)
-        self.data_manager_class = DataManager(ef_country, calibration_year, target_year, scenario_inputs_df)
+        self.data_manager_class = DataManager(ef_country, calibration_year, target_year)
         self.ef_country = ef_country
 
 
     def compute_system_milk_exports(self, scenario_animal_data, baseline_animal_data):
+        """
+        Calculates the total kilograms of milk exported for each scenario.
 
+        Args:
+            scenario_animal_data (DataFrame): Animal data for different scenarios.
+            baseline_animal_data (DataFrame): Baseline animal data.
+        
+        Returns:
+            DataFrame: A DataFrame with index as scenarios and columns for total milk in kg.
+        """
         df_index = list(baseline_animal_data.Scenarios.unique())
         df_index.extend(scenario_animal_data.Scenarios.unique())
         sc_herd_dataframe = pd.concat([scenario_animal_data, baseline_animal_data], ignore_index=True)
@@ -42,11 +77,15 @@ class Exports:
         return milk_system_export
 
     def compute_system_protien_exports(self, scenario_animal_data, baseline_animal_data):
-
         """
-        total beef weight exported from entire system.
+        Calculates the total beef weight exported from the entire system for each scenario.
 
-
+        Args:
+            scenario_animal_data (DataFrame): Animal data for different scenarios.
+            baseline_animal_data (DataFrame): Baseline animal data.
+        
+        Returns:
+            DataFrame: A DataFrame with index as scenarios and columns for carcass weight in kg and by beef systems.
         """
 
         df_index = list(baseline_animal_data.Scenarios.unique())
@@ -110,14 +149,18 @@ class Exports:
 
 
     def compute_system_total_protein_exports(self, scenario_animal_data, baseline_animal_data):
-
         """
-                total protein exported by the entire system, assuming a milk protein content of 3.5% and a beef protein content of 23%
-        """
+        Calculates the total protein exported by the entire system, assuming specific milk and beef protein contents.
 
+        Args:
+            scenario_animal_data (DataFrame): Animal data for different scenarios.
+            baseline_animal_data (DataFrame): Baseline animal data.
+        
+        Returns:
+            DataFrame: A DataFrame with index as scenarios and columns for total protein, milk protein, and beef protein in kg.
+        """
         df_index = list(baseline_animal_data.Scenarios.unique())
         df_index.extend(scenario_animal_data.Scenarios.unique())
-        sc_herd_dataframe = pd.concat([scenario_animal_data, baseline_animal_data], ignore_index=True)
 
         milk_protein_content = self.data_manager_class.milk_protein_content
         beef_protein_content = self.data_manager_class.beef_protein_content

@@ -1,0 +1,92 @@
+:py:mod:`resource_manager.data_loader`
+======================================
+
+.. py:module:: resource_manager.data_loader
+
+.. autoapi-nested-parse::
+
+   =====================
+   Data Loader Module
+   =====================
+   This module contains a class for loading data specific to livestock management, facilitating the retrieval
+   of various datasets necessary for calculations and analyses within the livestock domain.
+
+   The `Loader` class contains methods to retrieve a dataframe containing the concentrate requirements per animal specific to the ef_country,
+   a dataframe containing weight gain data for cattle specific to the ef_country, a dataframe containing weight gain data for sheep specific to the ef_country,
+   a dataframe containing cattle herd data, and a dataframe containing various parameters relevant to livestock management, filtered by the ef_country.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   resource_manager.data_loader.Loader
+
+
+
+
+.. py:class:: Loader(ef_country)
+
+
+   A class for loading data specific to livestock management, facilitating the retrieval
+   of various datasets necessary for calculations and analyses within the livestock domain.
+
+   .. attribute:: dataframes
+
+      An instance of DataManager for accessing the database.
+
+      :type: DataManager
+
+   .. attribute:: ef_country
+
+      The country code for which the data is being loaded, used to filter data.
+
+      :type: str
+
+   .. py:method:: concentrate_per_animal_dataframe()
+
+      Retrieves a dataframe containing the concentrate requirements per animal specific to the ef_country.
+
+      :returns: A pandas DataFrame containing concentrate requirements per animal.
+      :rtype: DataFrame
+
+
+   .. py:method:: weight_gain_cattle()
+
+      Retrieves a dataframe containing weight gain data for cattle specific to the ef_country.
+
+      :returns: A pandas DataFrame containing weight gain data for cattle.
+      :rtype: DataFrame
+
+
+   .. py:method:: weight_gain_sheep()
+
+      Retrieves a dataframe containing weight gain data for sheep specific to the ef_country.
+
+      :returns: A pandas DataFrame containing weight gain data for sheep.
+      :rtype: DataFrame
+
+
+   .. py:method:: cattle_herd_data()
+
+      Retrieves a dataframe containing cattle herd data.
+
+      :returns: A pandas DataFrame containing cattle herd data.
+      :rtype: DataFrame
+
+
+   .. py:method:: parameter_data()
+
+      Retrieves a dataframe containing various parameters relevant to livestock management,
+      filtered by the ef_country.
+
+      :returns: A pandas DataFrame containing various parameters relevant to livestock management.
+      :rtype: DataFrame
+
+
+
