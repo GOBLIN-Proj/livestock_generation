@@ -13,11 +13,11 @@
   ```
     src/
     │
-    ├── geo_livestock_generation/
-    │   └── ... (other modules and sub-packages)
-    │
     ├── livestock_generation/
-    |   └── ... (other modules and sub-packages)
+    │   └── ... (other modules and sub-packages)
+        │
+        ├── geo_livestock_generation/
+        |   └── ... (other modules and sub-packages)
 
  ```
  
