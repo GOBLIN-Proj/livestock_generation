@@ -9,9 +9,9 @@ from the entire system for each scenario, and the total protein exported by the 
 
 """
 import pandas as pd
-from resource_manager.livestock_data_manager import DataManager
-from resource_manager.scenario_fetcher import ScenarioDataFetcher
-from resource_manager.data_loader import Loader
+from livestock_generation.resource_manager.livestock_data_manager import DataManager
+from livestock_generation.resource_manager.scenario_fetcher import ScenarioDataFetcher
+from livestock_generation.resource_manager.data_loader import Loader
 
 
     

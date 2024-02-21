@@ -4,6 +4,17 @@
 .. py:module:: livestock_generation
 
 
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   database/index.rst
+   geo_livestock_generation/index.rst
+   resource_manager/index.rst
+
+
 Submodules
 ----------
 .. toctree::

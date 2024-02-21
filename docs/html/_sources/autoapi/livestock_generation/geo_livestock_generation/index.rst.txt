@@ -1,0 +1,16 @@
+:py:mod:`livestock_generation.geo_livestock_generation`
+=======================================================
+
+.. py:module:: livestock_generation.geo_livestock_generation
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   geo_livestock/index.rst
+   geo_livestock_exports/index.rst
+
+

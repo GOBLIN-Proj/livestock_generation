@@ -1,5 +1,5 @@
-from geo_livestock_generation.geo_livestock import AnimalData
-from geo_livestock_generation.geo_livestock_exports import Exports
+from livestock_generation.geo_livestock_generation.geo_livestock import AnimalData
+from livestock_generation.geo_livestock_generation.geo_livestock_exports import Exports
 import pandas as pd
 import os
 
