@@ -1,6 +1,6 @@
 # 🐄🐏 Livstock generation tool for cattle herds and sheep flocks
-[![license](https://img.shields.io/badge/License-GPL%203.0-red)](https://github.com/colmduff/livestock_generation/blob/0.1.0/LICENSE)
-[![python](https://img.shields.io/badge/python-3.9-blue?logo=python&logoColor=white)](https://github.com/colmduff/livestock_generation)
+[![license](https://img.shields.io/badge/License-MIT%203.0-red)](https://github.com/GOBLIN-Proj/livestock_generation/blob/0.1.0/LICENSE)
+[![python](https://img.shields.io/badge/python-3.9-blue?logo=python&logoColor=white)](https://github.com/GOBLIN-Proj/livestock_generation)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
@@ -54,7 +54,7 @@ When prompted enter your ```<username>``` and password, which is your ```<access
 
 
 ```bash
-pip install "livestock_generation@git+https://github.com/colmduff/livestock_generation.git@main" 
+pip install "livestock_generation@git+https://github.com/GOBLIN-Proj/livestock_generation.git@main" 
 
 ```
 
