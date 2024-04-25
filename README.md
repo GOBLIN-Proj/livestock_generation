@@ -51,6 +51,12 @@ pip install "livestock_generation@git+https://github.com/GOBLIN-Proj/livestock_g
 
 ```
 
+Install from PyPI
+
+```bash
+pip install livestock_generation
+```
+
 ## Usage
 ```python
 from livestock_generation.livestock import AnimalData
