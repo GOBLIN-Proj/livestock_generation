@@ -62,6 +62,7 @@ pip install livestock_generation
 from livestock_generation.livestock import AnimalData
 from livestock_generation.livestock_exports import Exports
 import pandas as pd
+import os
 
 
 def main():
