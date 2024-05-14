@@ -57,7 +57,7 @@ class Exports:
         milk_system_export = pd.DataFrame(
             index=df_index,
             columns=["Scenarios", "total_milk_kg"],
-        ).fillna(0)
+        )
 
         for sc in milk_system_export.index:
 
@@ -76,7 +76,7 @@ class Exports:
                 pop = selected_milk_data["pop"].iloc[0]
                 milk_system_export.loc[sc, "total_milk_kg"] = daily_milk * pop * 365
             else:
-                milk_system_export.loc[sc, "total_milk_kg"] = 0
+                milk_system_export.loc[sc, "total_milk_kg"] = 0.0
 
         return milk_system_export
 
