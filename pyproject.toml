@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "livestock_generation"
-version = "0.2.1"
+version = "0.2.2"
 description = "A tool that uses Ireland specific data to generate a baseline and scenario livestock herds for sheep and cattle."
 authors = ["Colm Duffy"]
 license = "MIT"

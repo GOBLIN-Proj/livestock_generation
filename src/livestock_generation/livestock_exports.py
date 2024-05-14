@@ -57,22 +57,26 @@ class Exports:
         milk_system_export = pd.DataFrame(
             index=df_index,
             columns=["Scenarios", "total_milk_kg"],
-        )
+        ).fillna(0)
 
         for sc in milk_system_export.index:
+
+            milk_system_export.loc[sc, "Scenarios"] = sc
 
             mask = (
                 (sc_herd_dataframe["cohort"] == "dairy_cows")
                 & (sc_herd_dataframe["Scenarios"] == sc)
                 & (sc_herd_dataframe["pop"] != 0)
             )
+            # Selecting the data based on mask
+            selected_milk_data = sc_herd_dataframe.loc[mask]
 
-            milk_system_export.loc[sc, "total_milk_kg"] = (
-                sc_herd_dataframe.loc[mask, "daily_milk"].values[0]
-                * sc_herd_dataframe.loc[mask, "pop"].values[0]
-                * 365
-            )
-            milk_system_export.loc[sc, "Scenarios"] = sc
+            if not selected_milk_data.empty:
+                daily_milk = selected_milk_data["daily_milk"].iloc[0]
+                pop = selected_milk_data["pop"].iloc[0]
+                milk_system_export.loc[sc, "total_milk_kg"] = daily_milk * pop * 365
+            else:
+                milk_system_export.loc[sc, "total_milk_kg"] = 0
 
         return milk_system_export
 
